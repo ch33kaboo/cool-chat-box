@@ -1,12 +1,14 @@
 <script>
-    export let name = "person"
-    export let age = 68
-    export let love = "pizza"
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher()
 
+    const handleClick = () => {
+        dispatch('click')
+    }
 </script>
 
-<main class="px-2 py-1 bg-pink-500 text-black rounded-lg active:scale-75">
-    hello {name} you are {age} YO and you love {love}
+<main on:click="{handleClick}" class="btn btn-accent">
+    <slot></slot>
 </main>
 
 <style>
