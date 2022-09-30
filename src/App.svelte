@@ -1,40 +1,53 @@
 <script>
+	import { onMount } from 'svelte';
 
-  $: foods = []
-  const handleChange = (e) => {
-    e.target.checked ? foods = [...foods, e.target.value] : foods = foods.filter(data => data != e.target.value)
-  }
+	let canvas;
+
+	onMount(() => {
+		const ctx = canvas.getContext('2d');
+		let frame = requestAnimationFrame(loop);
+
+		function loop(t) {
+			frame = requestAnimationFrame(loop);
+
+			const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+			for (let p = 0; p < imageData.data.length; p += 4) {
+				const i = p / 4;
+				const x = i % canvas.width;
+				const y = i / canvas.width >>> 0;
+
+				const r = 64 + (128 * x / canvas.width) + (64 * Math.sin(t / 1000));
+				const g = 64 + (128 * y / canvas.height) + (64 * Math.cos(t / 1000));
+				const b = 128;
+
+				imageData.data[p + 0] = r;
+				imageData.data[p + 1] = g;
+				imageData.data[p + 2] = b;
+				imageData.data[p + 3] = 255;
+			}
+
+			ctx.putImageData(imageData, 0, 0);
+		}
+
+		return () => {
+			cancelAnimationFrame(frame);
+		};
+	});
 </script>
 
-<main class="flex flex-col items-center justify-center gap-2">
-  <div class="flex items-center justify-start gap-1">
-    <input on:change="{(e) => {handleChange(e)}}" type="checkbox" value="potato" >
-    <h1>potato</h1>
-  </div>
-  <div class="flex items-center justify-start gap-1">
-    <input on:change="{(e) => {handleChange(e)}}" type="checkbox" value="carrot" >
-    <h1>carrot</h1>
-  </div>
-  <div class="flex items-center justify-start gap-1">
-    <input on:change="{(e) => {handleChange(e)}}" type="checkbox" value="banana" >
-    <h1>banana</h1>
-  </div>
-  <div class="flex items-center justify-start gap-1">
-    <input on:change="{(e) => {handleChange(e)}}" type="checkbox" value="apple" >
-    <h1>apple</h1>
-  </div>
-  <div class="flex items-center justify-start gap-1">
-    <input on:change="{(e) => {handleChange(e)}}" type="checkbox" value="orange" >
-    <h1>orange</h1>
-  </div>
-
-  <div class="mt-10 flex flex-col items-center justify-center gap-2">
-    {#each foods as food}
-      <h1>{food}</h1>
-    {/each}
-  </div>
-</main>
+<canvas
+	bind:this={canvas}
+	width={32}
+	height={32}
+></canvas>
 
 <style>
-
+	canvas {
+		width: 100%;
+		height: 100%;
+		background-color: #666;
+		-webkit-mask: url(./assets/black_medium_svg.svg) 50% 50% no-repeat;
+		mask: url(./assets/black_medium_svg.svg) 50% 50% no-repeat;
+	}
 </style>
