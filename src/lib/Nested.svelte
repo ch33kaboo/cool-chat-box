@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+
     const dispatch = createEventDispatcher()
 
     const handleClick = () => {
@@ -7,8 +8,8 @@
     }
 </script>
 
-<main on:click="{handleClick}" class="btn btn-accent">
-    <slot></slot>
+<main>
+    <div  class="btn btn-primary" on:click={handleClick}>click me</div>
 </main>
 
 <style>
