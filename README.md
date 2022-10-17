@@ -42,3 +42,5 @@ All commands are run from the root of the project, from a terminal:
 </dl>
 </dd>
 </dl>
+
+### Side Note: I know the code is too messy and not documented at all, I might refactor it later.

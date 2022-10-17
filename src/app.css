@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* this CSS styling is to style scroll bars on the page */
 :root {
   --code-color: darkred;
   --code-bg-color: #aaaaaa;

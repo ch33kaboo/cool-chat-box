@@ -1,10 +1,12 @@
 <script>
-	import { beforeUpdate, afterUpdate } from 'svelte'
+	import { afterUpdate } from 'svelte'
 	import { allMessages } from './stores/messagesStore.js'
 	import ChatBubble from "./lib/ChatBubble.svelte"
 
 	let myDiv
 
+	// wantEdit object let us know if user want to send a new message or edit an existing one, because in both cases the message comes from one input & we cannot tell.
+	// also I had to pass the userId with it to know which input to focus, obv in real life app these two input would be in two different machines
 	let wantEdit = {
 		wantEdit : false,
 		userId : null
@@ -15,7 +17,7 @@
 	let deleteMessage = (msgid) => {
 		messages = messages.filter(item => msgid != item.msgid)
 		messages = [...messages, {
-			user : -1 ,
+			user : -1 , // -1 tells ChatBubble component not to render this message, we cant simply delete from the array because we will have duplicate keys for our each loop later
 			msgid : msgid
 		}]
 		wantScroll = false
@@ -33,6 +35,7 @@
 		wantScroll = false
 	}
 
+	// scroll down each time a user send a message
 	afterUpdate(() => {
 		if (!wantScroll) {
 			wantScroll = true
@@ -43,6 +46,7 @@
 
 	let messages = []
 
+	// the store here is useless since there is only one component using it, but you certainly need it on a larger app
 	allMessages.subscribe((data) => {
 		messages = data
 	})
@@ -52,9 +56,10 @@
 			send(e)
 		}
 	}
+
 	let send = (e) => {
 		e.target.value = e.target.value.replace(/\s+/g, ' ').trim()
-		if (e.target.value == "") {return}
+		if (e.target.value == "") {return} //if user didn't write a message, just a sequence of spaces or an empty message
 
 		if (wantEdit.wantEdit) {
 			messages[foundIndex].msg = e.target.value;

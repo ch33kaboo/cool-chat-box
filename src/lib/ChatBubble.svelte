@@ -21,7 +21,7 @@
 {#if message.user == -1}
     
 {:else}
-    <div bind:this={e} data-aos="fade-{message.user == `2` ? "left" : "right" }" class="{message.user == `1` ? "self-start" : "self-end" } max-w-lg">
+    <div bind:this={e} data-aos="fade-{message.user == `2` ? "left" : "right" }" class="{message.user == `1` ? "self-start" : "self-end" } max-w-md">
         <div class="flex items-center justify-center {message.user == `2` ? "flex-row-reverse" : "" }">
             <div class="overflow-x-auto {message.user == `2` ? "bg-pink-500" : "bg-yellow-500" } px-3 py-1 rounded-2xl text-white bg-opacity-60">
                 {message.msg}
